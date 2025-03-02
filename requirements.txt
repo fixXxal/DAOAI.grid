@@ -1,0 +1,8 @@
+ccxt>=1.50.0
+Flask
+
+numpy
+pandas
+requests
+scikit-learn
+# Add any additional libraries as needed

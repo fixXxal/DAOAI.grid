@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Account Page</title>
+  <style>
+    body {
+      background: linear-gradient(135deg, #000, #1A1A4A); /* Dark purple to dark blue gradient */
+      color: #fff; /* White text */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+      position: relative; /* Add this line */
+    }
+
+    .container {
+      text-align: center;
+      position: relative;
+      z-index: 1; /* Ensure container is above the background */
+      width: 100%;
+      max-width: 1200px;
+      padding: 20px;
+    }
+
+    .header {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center; /* Ensure items are aligned in the center */
+      padding: 10px;
+      box-sizing: border-box;
+    }
+
+    .header-item {
+      padding: 5px 10px;
+    }
+
+    .main-content {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .main-content-item {
+      margin: 10px 0;
+    }
+
+    .start-button {
+      background: #4B0082; /* Indigo color */
+      color: #fff; /* Corrected color to hex */
+      border-radius: 50%;
+      width: 100px;
+      height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      cursor: pointer;
+      margin-top: 20px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 0 20px #2a2b2e7a;
+      transition: transform 0.3s;
+    }
+
+    .start-button:hover {
+      transform: scale(1.1);
+    }
+
+    .start-button::before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: conic-gradient(#ff00ff, transparent, rgb(255, 0, 255)); /* Changed to purple */
+      animation: spin 2s linear infinite;
+      z-index: 0;
+    }
+
+    .start-button::after {
+      content: '';
+      position: absolute;
+      width: 80%;
+      height: 80%;
+      top: 10%;
+      left: 10%;
+      background: radial-gradient(circle, #00000088, #f0f0f079);
+      border-radius: 50%;
+      z-index: 1;
+      box-shadow: 0 0 20px #2a2b2e7a;
+    }
+
+    .start-button span {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 2;
+    }
+
+    .progress-ring {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      border: 10px solid transparent;
+      border-top-color: rgb(255, 0, 255); /* Changed to purple */
+      animation: spin 1s linear infinite;
+      display: none;
+    }
+
+    .vip-section, .assets-section {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 10px;
+      border-radius: 10px;
+      margin-top: 20px;
+      width: 100%;
+      max-width: 600px;
+    }
+
+    .footer {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      font-size: 12px;
+    }
+
+    .pattern {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('your-animated-pattern-url') no-repeat center center;
+      background-size: cover;
+      z-index: -2; /* Change to -2 */
+      opacity: 0.5;
+    }
+
+    .status-boxes {
+      display: flex;
+      justify-content: center; /* Center horizontally */
+      align-items: flex-end; /* Align to the bottom */
+      position: absolute;
+      bottom: 20px; /* Adjust as needed */
+      width: 100%;
+      max-width: 800px;
+      display: none; /* Initially hidden */
+    }
+
+    .status-box {
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid rgb(255, 0, 255); /* Updated border color to purple */
+      border-radius: 50%; /* Changed to circular shape */
+      padding: 20px;
+      color: #ff00ff;
+      font-size: 1em;
+      text-align: center;
+      width: 15%;
+      height: 15%;
+      box-shadow: 0 0 10px rgb(255, 0, 255); /* Updated box-shadow color to purple */
+      opacity: 0;
+      transition: opacity 0.5s;
+    }
+
+    .profit-message {
+      display: none;
+      margin-top: 20px;
+      color: #ff00ff;
+      font-size: 1.2em;
+      text-align: center;
+    }
+
+    .home-button-container {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+    }
+
+    .home-button {
+      background: #4B0082; /* Indigo color */
+      color: #fff; /* Corrected color to hex */
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+      text-decoration: none;
+    }
+
+    .home-button:hover {
+      background-color: #6A0DAD; /* Lighter indigo color */
+      transform: scale(1.05);
+    }
+
+    .record-button-container {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+    }
+
+    .record-button {
+      background: #4B0082; /* Indigo color */
+      color: #fff; /* Corrected color to hex */
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+      text-decoration: none;
+    }
+
+    .record-button:hover {
+      background-color: #6A0DAD; /* Lighter indigo color */
+      transform: scale(1.05);
+    }
+
+    .grid-trading-container {
+      background: rgba(140, 0, 255, 0.5);
+      padding: 10px 20px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(153, 0, 255, 0.5);
+      position: absolute; /* Ensure it stays in the middle */
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    @keyframes spin {
+      100% { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 768px) {
+      .header {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .header-item {
+        margin-bottom: 10px;
+      }
+
+      .main-content-item {
+        font-size: 0.9em;
+      }
+
+      .start-button {
+        width: 150px;
+        height: 150px;
+        font-size: 1.2em;
+      }
+
+      .progress-ring {
+        width: 130px;
+        height: 130px;
+      }
+
+      .status-box {
+        font-size: 0.8em;
+        width: 20%;
+      }
+
+      .vip-section, .assets-section {
+        width: 100%;
+        padding: 20px;
+      }
+    }
+
+    #background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1; /* Ensure this is behind other elements but above .pattern */
+    }
+  </style>
+</head>
+<body>
+    <canvas id="background"></canvas> <!-- Added canvas for background -->
+
+  <div class="pattern"></div>
+  <canvas id="background"></canvas> <!-- Added canvas for background animation -->
+  <div class="container">
+    <div class="header">
+      <div class="header-item home-button-container">
+        <a href="index.html" class="home-button">Home</a>
+      </div>
+      <div class="header-item grid-trading-container">
+        Grid Trading
+      </div>
+      <div class="header-item record-button-container">
+        <a href="record.html" class="record-button">Record</a> <!-- Ensure "Record" button links to record.html -->
+      </div>
+    </div>
+    <div class="main-content">
+      <div class="assets-section">
+        <div class="main-content-item">Available Assets: 0.00000000 USDT</div> <!-- Set initial value to 0 -->
+        <div class="main-content-item">Earnings Today: 0.00000000 USDT</div> <!-- Set initial value to 0 -->
+        <div class="main-content-item">Team Contribution: 0 USDT</div>
+      </div>
+      <div class="main-content-item">
+        <div class="start-button" onclick="startTrading()">
+          <span>Start</span>
+          <div class="progress-ring" id="progressRing"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vip-section">
+      <div class="main-content-item">VIP1 Welfare</div>
+      <div class="main-content-item">2-2.5% Profit Ratio</div>
+      <div class="main-content-item">Number of grids per day: 4</div>
+      <div class="main-content-item">Promotion Reward: 3 USDT</div>
+    </div>
+    <div class="status-boxes" id="statusBoxes">
+      <div class="status-box" id="status1">Grid Robot Starting</div>
+      <div class="status-box" id="status2">Scanning Market</div>
+      <div class="status-box" id="status3">Order Matching</div>
+      <div class="status-box" id="status4">Executing Trades</div>
+      <div class="status-box" id="status5">Grid Completed</div>
+    </div>
+    <div class="profit-message" id="profitMessage" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">Congratulations! You have earned 50% of the profit.</div>
+  </div>
+  <script>
+    let timeLeft = 60; // 1 minute
+    let timer;
+    let currentStatus = 0;
+    const statuses = [
+      "Grid Robot Starting",
+      "Scanning Market",
+      "Order Matching",
+      "Executing Trades",
+      "Grid Completed"
+    ];
+    let gridsToday = parseInt(localStorage.getItem('gridsToday')) || 0;
+    const lastGridDate = localStorage.getItem('lastGridDate');
+    const today = new Date().toLocaleDateString();
+
+    if (lastGridDate !== today) {
+      gridsToday = 0;
+      localStorage.setItem('gridsToday', gridsToday);
+      localStorage.setItem('lastGridDate', today);
+    }
+
+    const vipLevels = [
+      { level: 1, usdt: 100, profitRatio: 0.03, maxGridsPerDay: 4 },
+      { level: 2, usdt: 500, profitRatio: 0.04, maxGridsPerDay: 5 },
+      { level: 3, usdt: 1000, profitRatio: 0.05, maxGridsPerDay: 6 },
+      { level: 4, usdt: 2000, profitRatio: 0.06, maxGridsPerDay: 7 },
+      { level: 5, usdt: 8000, profitRatio: 0.07, maxGridsPerDay: 8 }
+    ];
+
+    function getVipLevel(balance) {
+      for (let i = vipLevels.length - 1; i >= 0; i--) {
+        if (balance >= vipLevels[i].usdt) {
+          return vipLevels[i];
+        }
+      }
+      return vipLevels[0];
+    }
+
+    function startTrading() {
+      const balanceElement = document.querySelector('.main-content-item:nth-child(1)');
+      let currentBalance = parseFloat(balanceElement.textContent.split(' ')[2]);
+      const vipLevel = getVipLevel(currentBalance);
+
+      if (gridsToday >= vipLevel.maxGridsPerDay) {
+        alert(`You have reached the maximum number of grids for today for VIP${vipLevel.level}. Please try again tomorrow.`);
+        return;
+      }
+
+      const button = document.querySelector('.start-button');
+      const progressRing = document.getElementById('progressRing');
+      const statusBoxes = document.getElementById('statusBoxes').children;
+      const statusContainer = document.getElementById('statusBoxes');
+      const profitMessage = document.getElementById('profitMessage');
+
+      // Hide button text and show progress elements
+      button.querySelector('span').style.display = 'none';
+      progressRing.style.display = 'block';
+      statusContainer.style.display = 'flex'; // Show status boxes
+      profitMessage.style.display = 'none'; // Hide profit message
+
+      // Update statuses every 12 seconds
+      for (let i = 0; i < statusBoxes.length; i++) {
+        setTimeout(() => {
+          for (let j = 0; j < statusBoxes.length; j++) {
+            statusBoxes[j].style.opacity = '0';
+          }
+          statusBoxes[i].style.opacity = '1';
+          currentStatus = i;
+        }, i * 12000); // 12 seconds per status
+      }
+
+      // Timer to hide progress ring and show profit message
+      timer = setInterval(() => {
+        timeLeft--;
+        if (timeLeft <= 0) {
+          clearInterval(timer);
+          progressRing.style.display = 'none';
+          button.querySelector('span').textContent = 'Start'; // Reset button text to "Start"
+          button.querySelector('span').style.display = 'block';
+          button.style.color = '#fff'; // Reset text color to white
+          for (let i = 0; i < statusBoxes.length; i++) {
+            statusBoxes[i].textContent = statuses[i].replace('ing', 'ed').replace('Completed', 'Completed');
+          }
+          profitMessage.style.display = 'block'; // Show profit message
+
+          // Calculate and add profit to user account balance
+          const profit = currentBalance * vipLevel.profitRatio;
+          currentBalance += profit;
+          balanceElement.textContent = `Available Assets: ${currentBalance.toFixed(8)} USDT`;
+
+          // Update today's earnings
+          const earningsElement = document.querySelector('.main-content-item:nth-child(2)');
+          let currentEarnings = parseFloat(earningsElement.textContent.split(' ')[2]);
+          currentEarnings += profit;
+          earningsElement.textContent = `Earnings Today: ${currentEarnings.toFixed(8)} USDT`;
+
+          // Add result to record
+          const newRecord = {
+            amount: `${profit.toFixed(2)} USDT`,
+            type: 'Grid benefits',
+            time: new Date().toLocaleString()
+          };
+
+          // Save the new record to localStorage
+          let records = JSON.parse(localStorage.getItem('records')) || [];
+          records.push(newRecord);
+          localStorage.setItem('records', JSON.stringify(records));
+
+          // Update balance and earnings on account.html
+          localStorage.setItem('accountBalance', currentBalance.toFixed(8));
+          localStorage.setItem('earningsToday', currentEarnings.toFixed(8));
+
+          // Increment gridsToday and save to localStorage
+          gridsToday++;
+          localStorage.setItem('gridsToday', gridsToday);
+
+          // Check if maximum grids for the day are reached
+          if (gridsToday >= vipLevel.maxGridsPerDay) {
+            button.disabled = true; // Disable the button
+            alert(`You have reached the maximum number of grids for today for VIP${vipLevel.level}. Please try again tomorrow.`);
+          } else {
+            button.disabled = false; // Enable the button for the next grid
+          }
+        }
+      }, 1000);
+    }
+
+    // Load balance and earnings from localStorage
+    window.addEventListener('load', () => {
+      const balanceElement = document.querySelector('.main-content-item:nth-child(1)');
+      const earningsElement = document.querySelector('.main-content-item:nth-child(2)');
+      const vipSection = document.querySelector('.vip-section');
+      const storedBalance = localStorage.getItem('accountBalance');
+      const storedEarnings = localStorage.getItem('earningsToday');
+      if (storedBalance) balanceElement.textContent = `Available Assets: ${storedBalance} USDT`;
+      if (storedEarnings) earningsElement.textContent = `Earnings Today: ${storedEarnings} USDT`;
+
+      // Update VIP section with user's VIP level and profit ratio
+      const currentBalance = parseFloat(storedBalance || 0);
+      const vipLevel = getVipLevel(currentBalance);
+      vipSection.innerHTML = `
+        <div class="main-content-item">VIP${vipLevel.level} Welfare</div>
+        <div class="main-content-item">${(vipLevel.profitRatio * 100).toFixed(1)}% Profit Ratio</div>
+        <div class="main-content-item">Number of grids per day: ${vipLevel.maxGridsPerDay}</div>
+        <div class="main-content-item">Promotion Reward: ${vipLevel.level * 3} USDT</div>
+      `;
+    });
+  </script>
+  <script src="script.js"></script> <!-- Ensure this script is included for background animation -->
+</body>
+</html>

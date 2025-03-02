@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Record Page</title>
+  <style>
+    body {
+      background: linear-gradient(135deg, #000, #1A1A4A); /* Dark purple and blue gradient background */
+      color: #fff; /* White text */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+    }
+
+    .container {
+      width: 80%;
+      max-width: 600px;
+      text-align: left;
+      position: relative;
+      padding: 20px;
+    }
+
+    .header {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+      background: rgba(0, 0, 0, 0.5);
+    }
+
+    .header-item {
+      padding: 5px 10px;
+    }
+
+    .record-list {
+      margin-top: 20px;
+      overflow-y: auto;
+      max-height: 70vh;
+    }
+
+    .record-item {
+      background: rgba(255, 255, 255, 0.1);
+      margin-bottom: 10px;
+      padding: 10px;
+      border-radius: 10px;
+    }
+
+    .record-item.green {
+      color: #00FF00; /* Green text for positive values */
+    }
+
+    .record-item.red {
+      color: #FF0000; /* Red text for negative values */
+    }
+
+    .footer {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      font-size: 12px;
+    }
+
+    .pattern {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('your-animated-pattern-url') no-repeat center center;
+      background-size: cover;
+      z-index: -1;
+      opacity: 0.5;
+    }
+
+    .navigation {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      position: absolute;
+      bottom: 0;
+      padding: 10px;
+      background: rgba(0, 0, 0, 0.5);
+    }
+
+    .nav-item {
+      flex: 1;
+      text-align: center;
+      padding: 10px 0;
+    }
+
+    .home-button {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      padding: 10px 20px;
+      background: rgba(0, 0, 0, 0.5);
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+    <canvas id="background"></canvas> <!-- Added canvas for background -->
+
+  <canvas id="background"></canvas>
+  <button class="home-button" onclick="window.location.href='daoai.html'">Home</button>
+  <div class="pattern"></div>
+  <div class="container">
+    <div class="header">
+      <div class="header-item">Grid Trading</div>
+      <div class="header-item">Record</div>
+    </div>
+    <div class="record-list" id="recordList">
+      <!-- Records will be dynamically inserted here -->
+    </div>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const recordList = document.getElementById('recordList');
+      const records = JSON.parse(localStorage.getItem('records')) || [];
+
+      function updateRecords() {
+        recordList.innerHTML = '';
+        records.forEach(record => {
+          const recordItem = document.createElement('div');
+          recordItem.className = 'record-item ' + (parseFloat(record.amount) > 0 ? 'green' : 'red');
+          recordItem.innerHTML = `
+            <div>Amount: ${record.amount}</div>
+            <div>Type: ${record.type}</div>
+            <div>Time: ${record.time}</div>
+          `;
+          recordList.appendChild(recordItem);
+        });
+      }
+
+      updateRecords();
+
+      // Automatically update records every 5 seconds
+      setInterval(() => {
+        const updatedRecords = JSON.parse(localStorage.getItem('records')) || [];
+        if (JSON.stringify(records) !== JSON.stringify(updatedRecords)) {
+          records.length = 0;
+          records.push(...updatedRecords);
+          updateRecords();
+        }
+      }, 5000);
+    });
+  </script>
+</body>
+</html>

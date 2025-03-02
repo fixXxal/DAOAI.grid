@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DAO AI</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <style>
+        body, h1, h2, p, th, td {
+            color: white;
+        }
+        .navbar, .dropdown-menu {
+            background-color: #343a4051;
+        }
+        .custom-table {
+            border-collapse: collapse;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.039);
+            backdrop-filter: blur(10px);
+        }
+        .custom-table th, .custom-table td {
+            border: none;
+            padding: 8px;
+            text-align: left;
+        }
+        .custom-table th {
+            background-color: rgba(52, 58, 64, 0.205);
+            color: white;
+            outline: none; /* Added to remove the outline */
+        }
+        .custom-table tr:nth-child(even) {
+            background-color: rgba(233, 236, 239, 0.078);
+        }
+        .change-green {
+            color: green;
+        }
+        .change-red {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="background"></canvas>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">DAO AI</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="daoai.html">DAO BOT</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="account.html">Account</a> <!-- Added link to account page -->
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="contact.html">Contact</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="login.html">Login/Register</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="about.html">About</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h1 class="mt-5">Welcome to DAO AI</h1>
+        <p class="lead">Your AI-powered grid trading solution.</p>
+        <p>Explore our features and get started with trading!</p>
+        
+        <table class="table custom-table mt-5" id="crypto-prices-table">
+            <thead>
+                <tr>
+                    <th colspan="5" class="text-center">Live Cryptocurrency Prices</th>
+                </tr>
+                <tr>
+                    <th>Rank</th>
+                    <th>Coin</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>24h Change</th>
+                </tr>
+            </thead>
+            <tbody id="crypto-table">
+                <!-- Live data will be populated here -->
+            </tbody>
+        </table>
+
+        <h2 class="mt-5">Top Gainers</h2>
+        <table class="table custom-table" id="top-gainers-table">
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Coin</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>24h Change</th>
+                </tr>
+            </thead>
+            <tbody id="gainers-table">
+                <!-- Live data will be populated here -->
+            </tbody>
+        </table>
+
+        <h2 class="mt-5">Top Losers</h2>
+        <table class="table custom-table" id="top-losers-table">
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Coin</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>24h Change</th>
+                </tr>
+            </thead>
+            <tbody id="losers-table">
+                <!-- Live data will be populated here -->
+            </tbody>
+        </table>
+    </div>
+    
+    <script>
+        async function fetchCryptoData() {
+            try {
+                const response = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd');
+                const data = await response.json();
+                const tableBody = document.getElementById('crypto-table');
+                const gainersTableBody = document.getElementById('gainers-table');
+                const losersTableBody = document.getElementById('losers-table');
+                
+                data.forEach((coin, index) => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${index + 1}</td>
+                        <td>
+                            <img src="${coin.image}" alt="${coin.name} icon" style="width: 30px; height: 30px;">
+                            <div>${coin.symbol.toUpperCase()}</div>
+                        </td>
+                        <td>${coin.name}</td>
+                        <td>$${coin.current_price.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
+                        <td class="${coin.price_change_percentage_24h > 0 ? 'change-green' : 'change-red'}">${coin.price_change_percentage_24h.toFixed(2)}%</td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+
+                const topGainers = data.sort((a, b) => b.price_change_percentage_24h - a.price_change_percentage_24h).slice(0, 10);
+                topGainers.forEach((coin, index) => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${index + 1}</td>
+                        <td>
+                            <img src="${coin.image}" alt="${coin.name} icon" style="width: 30px; height: 30px;">
+                            <div>${coin.symbol.toUpperCase()}</div>
+                        </td>
+                        <td>${coin.name}</td>
+                        <td>$${coin.current_price.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
+                        <td class="${coin.price_change_percentage_24h > 0 ? 'change-green' : 'change-red'}">${coin.price_change_percentage_24h.toFixed(2)}%</td>
+                    `;
+                    gainersTableBody.appendChild(row);
+                });
+
+                const topLosers = data.sort((a, b) => a.price_change_percentage_24h - b.price_change_percentage_24h).slice(0, 10);
+                topLosers.forEach((coin, index) => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${index + 1}</td>
+                        <td>
+                            <img src="${coin.image}" alt="${coin.name} icon" style="width: 30px; height: 30px;">
+                            <div>${coin.symbol.toUpperCase()}</div>
+                        </td>
+                        <td>${coin.name}</td>
+                        <td>$${coin.current_price.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
+                        <td class="${coin.price_change_percentage_24h > 0 ? 'change-green' : 'change-red'}">${coin.price_change_percentage_24h.toFixed(2)}%</td>
+                    `;
+                    losersTableBody.appendChild(row);
+                });
+            } catch (error) {
+                console.error('Error fetching cryptocurrency data:', error);
+            }
+        }
+        fetchCryptoData();
+
+        function showVIPLevels() {
+            const vipSection = document.getElementById('vip-levels-section');
+            vipSection.style.display = 'block';
+            vipSection.scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+    <script src="script.js"></script>
+    
+    <footer>
+        <p>© 2025 DAO AI Auto Grid Trading System</p>
+    </footer>
+</body>
+</html>

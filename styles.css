@@ -1,0 +1,163 @@
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #4B0082, #6A0DAD); /* Mixed purple to dark purple gradient */
+
+    margin: 0;
+    padding: 0;
+    transition: background-color 0.3s ease;
+    color: #fff; /* Corrected color to hex */
+}
+
+.container {
+    width: 80%;
+    margin: auto;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.main {
+    padding: 20px;
+    background: rgba(255, 0, 0, 0.096); /* Updated background to transparent */
+    backdrop-filter: blur(10px); /* Added backdrop blur effect */
+    margin-top: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+    color: #fff; /* Corrected color to hex */
+}
+
+.main:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.footer {
+    background: #333;
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+    margin-top: 20px;
+    transition: background 0.3s ease;
+}
+
+.footer:hover {
+    background: #444;
+}
+
+.navbar {
+    transition: background-color 0.3s ease;
+    color: #fff; /* Corrected color to hex */
+}
+
+.navbar:hover {
+    background-color: #e9ecef;
+}
+
+.nav-link {
+    transition: color 0.3s ease;
+    color: #fff; /* Corrected color to hex */
+}
+
+.nav-link:hover {
+    color: #007bff;
+}
+
+button {
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    color: #fff; /* Corrected color to hex */
+}
+
+button:hover {
+    transform: scale(1.05);
+    background-color: #0056b3;
+}
+
+.nav-button {
+    background-color: #4B0082; /* Indigo color */
+    color: #fff; /* Corrected color to hex */
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.nav-button:hover {
+    background-color: #6A0DAD; /* Lighter indigo color */
+    transform: scale(1.05);
+}
+
+table {
+    transition: transform 0.3s ease;
+    color: #fff; /* Corrected color to hex */
+}
+
+table:hover {
+    transform: scale(1.01);
+}
+
+.change-green {
+    color: #fff; /* Corrected color to hex */
+    transition: color 0.3s ease;
+}
+
+.change-red {
+    color: #fff; /* Corrected color to hex */
+    transition: color 0.3s ease;
+}
+
+#background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background: #000;
+}
+
+.dropdown-menu,
+.dropdown-menu h6,
+.dropdown-menu p,
+.dropdown-menu th,
+.dropdown-menu td {
+    color: #fff; /* Ensure all text in the VIP box is white */
+}
+
+@media (max-width: 768px) {
+    .container {
+        width: 100%;
+        padding: 0 10px;
+    }
+
+    .main {
+        padding: 10px;
+        margin-top: 10px;
+    }
+
+    .footer {
+        padding: 5px;
+    }
+
+    .navbar {
+        padding: 10px;
+    }
+
+    .nav-link {
+        padding: 5px;
+    }
+
+    button {
+        width: 100%;
+        padding: 10px;
+    }
+
+    table {
+        width: 100%;
+        font-size: 0.9em;
+    }
+
+    .status-box {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}

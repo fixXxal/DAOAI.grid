@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>USDT Balance</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #000, #1A1A4A); /* Dark purple to dark blue gradient */
+            color: white;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+        #background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        .container {
+            max-width: 400px;
+            margin: auto;
+            background: rgba(255, 255, 255, 0.064); /* Transparent background */
+            backdrop-filter: blur(10px); /* Blur effect */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .balance-box {
+            background: linear-gradient(to right, #9000ff, #c800ff);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: left;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .balance-box h2 {
+            margin: 5px 0;
+            font-size: 24px;
+        }
+        .balance-box p {
+            margin: 0;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        .options {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .options button {
+            background-color: #8e09af62;
+            color: white;
+            border: none;
+            padding: 10px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 30%;
+        }
+        .usdt-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .usdt-card h3 {
+            margin: 0;
+            font-size: 18px;
+        }
+        .usdt-card p {
+            margin: 2px 0;
+            font-size: 14px;
+            color: gray;
+        }
+        .deposit-container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+        .deposit-container input {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: none;
+            border-radius: 5px;
+            background: #f0f0f0;
+        }
+        .deposit-container button {
+            background-color: #8e09af62;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+        .deposit-address {
+            color: rgb(255, 255, 255);
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            word-break: break-all;
+            display: block; /* Make it always visible */
+        }
+        .withdraw-container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+        .withdraw-container input {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: none;
+            border-radius: 5px;
+            background: #f0f0f0;
+        }
+        .withdraw-container button {
+            background-color: #8e09af62;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+        .settings-button {
+            background-color: #6A0DAD; /* Purple color */
+            color: white;
+            border: none;
+            padding: 10px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 30%;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .settings-button:hover {
+            background-color: #9000ff; /* Lighter purple color */
+            transform: scale(1.05);
+        }
+        .save-changes-button {
+            background-color: #6A0DAD; /* Purple color */
+            color: white;
+            border: none;
+            padding: 10px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .save-changes-button:hover {
+            background-color: #9000ff; /* Lighter purple color */
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <canvas id="background"></canvas> <!-- Added canvas for background -->
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">DAO AI</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html">Home</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Removed Home Button -->
+
+    <div class="container">
+        <!-- User Information Box -->
+        <div class="balance-box">
+            <p>Logged in as:</p>
+            <p>Username: <span id="current-username"></span></p>
+            <p>UID: <span id="user-uid"></span></p>
+            <p>Name: <span id="current-name"></span></p>
+        </div>
+
+        <!-- Top Balance Box -->
+        <div class="balance-box">
+            <p>Total Assets Equivalent (USDT)</p>
+            <h2>00.00000</h2>
+            <p>≈00.00000 USD</p>
+        </div>
+
+        <!-- Deposit Container -->
+        <div class="deposit-container">
+            <h3>Deposit USDT</h3>
+            <input type="number" id="deposit-amount" placeholder="Enter amount to deposit">
+            <div id="deposit-address" class="deposit-address" style="display: visibility: hidden;;">
+             Deposit Address: <span id="address">BEP 20 0x23f149ce0b310af8222937894180e9a7c6cf4187</span> <button id="copyButton">Copy</button></span> <button id="Deposit confirm-deposit-button">Deposit confirm</button>
+            </div>
+        </div>
+
+        <!-- Withdraw Container -->
+        <div class="withdraw-container">
+            <h3>Withdraw USDT</h3>
+            <input type="text" id="withdraw-address" placeholder="Enter your wallet address">
+            <input type="number" id="withdraw-amount" placeholder="Enter amount to withdraw">
+            <button id="withdraw-button">Submit Withdrawal</button>
+        </div>
+
+        <!-- Settings Button -->
+        <button class="settings-button" onclick="showSettings()">Settings</button>
+        
+        <!-- Settings Section -->
+        <div id="settings-section" class="settings-container" style="display: none;">
+            <h2 class="mt-5">Settings</h2>
+            <form id="settings-form">
+                <div class="form-group">
+                    <label for="name">Change Name</label>
+                    <input type="text" class="form-control" id="name" placeholder="Enter new name">
+                </div>
+                <div class="form-group">
+                    <label for="password">Change Password</label>
+                    <input type="password" class="form-control" id="password" placeholder="Enter new password">
+                </div>
+                <label for="minAmountInput">Enter Minimum Amount:</label>
+                <input type="number" id="minAmountInput" name="minAmountInput" min="0">
+                <button type="submit" class="save-changes-button">Save Changes</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const storedUser = JSON.parse(localStorage.getItem('user'));
+            if (storedUser) {
+                document.getElementById('current-username').textContent = storedUser.username;
+                document.getElementById('user-uid').textContent = storedUser.uid || generateUID();
+                document.getElementById('current-name').textContent = storedUser.name;
+            }
+
+            let balance = 0;
+            const balanceElement = document.querySelector('.balance-box h2');
+            const earningsElement = document.querySelector('.balance-box p:nth-child(3)');
+            const optionsBalanceElement = document.querySelector('.options h2');
+            const optionsEarningsElement = document.querySelector('.options p:nth-child(3)');
+
+            balanceElement.textContent = balance.toFixed(6);
+            earningsElement.textContent = `≈${balance.toFixed(6)} USD`;
+            optionsBalanceElement.textContent = balance.toFixed(6);
+            optionsEarningsElement.textContent = `≈${balance.toFixed(6)} USD`;
+
+            document.getElementById('deposit-amount').addEventListener('input', function() {
+                const depositAmount = parseFloat(document.getElementById('deposit-amount').value);
+                if (depositAmount && !isNaN(depositAmount) && depositAmount >= 100) {
+                    document.getElementById('deposit-address').style.display = 'block';
+                } else {
+                    document.getElementById('deposit-address').style.display = 'none';
+                }
+            });
+
+            document.getElementById('confirm-deposit-button').addEventListener('click', function() {
+                const depositAmount = parseFloat(document.getElementById('deposit-amount').value);
+                if (depositAmount && !isNaN(depositAmount) && depositAmount >= 100) {
+                    setTimeout(() => {
+                        balance += depositAmount;
+                        balanceElement.textContent = balance.toFixed(6);
+                        earningsElement.textContent = `≈${balance.toFixed(6)} USD`;
+                        optionsBalanceElement.textContent = balance.toFixed(6);
+                        optionsEarningsElement.textContent = `≈${balance.toFixed(6)} USD`;
+                        alert(`Deposit of ${depositAmount} USDT confirmed!`);
+                    }, 1200000); // 20 minutes in milliseconds
+                } else {
+                    alert('Please enter a valid amount of at least 100.');
+                }
+            });
+
+            document.getElementById('withdraw-button').addEventListener('click', function() {
+                const withdrawAddress = document.getElementById('withdraw-address').value;
+                const withdrawAmount = parseFloat(document.getElementById('withdraw-amount').value);
+                if (withdrawAddress && !isNaN(withdrawAmount) && withdrawAmount > 0 && withdrawAmount <= balance) {
+                    alert(`Withdrawal request submitted for ${withdrawAmount} USDT to address ${withdrawAddress}.`);
+                    balance -= withdrawAmount;
+                    balanceElement.textContent = balance.toFixed(6);
+                    earningsElement.textContent = `≈${balance.toFixed(6)} USD`;
+                    optionsBalanceElement.textContent = balance.toFixed(6);
+                    optionsEarningsElement.textContent = `≈${balance.toFixed(6)} USD`;
+                } else {
+                    alert('Invalid address or amount!');
+                }
+            });
+
+            const canvas = document.getElementById('background');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            function drawBackground() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+                gradient.addColorStop(0, '#000');
+                gradient.addColorStop(1, '#1A1A4A');
+                ctx.fillStyle = gradient;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+            }
+
+            drawBackground();
+            window.addEventListener('resize', () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                drawBackground();
+            });
+        });
+
+        function copyAddress() {
+            const address = '0x23f149ce0b310af8222937894180e9a7c6cf4187';
+            navigator.clipboard.writeText(address).then(() => {
+                alert('Address copied to clipboard!');
+            });
+        }
+
+        function showSettings() {
+            const settingsSection = document.getElementById('settings-section');
+            settingsSection.style.display = 'block';
+            settingsSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        document.getElementById('settings-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const newName = document.getElementById('name').value;
+            const newPassword = document.getElementById('password').value;
+            if (newName && !newPassword) {
+                const updatedUser = { ...JSON.parse(localStorage.getItem('user')), name: newName };
+                localStorage.setItem('user', JSON.stringify(updatedUser));
+                alert('Name updated successfully!');
+                document.getElementById('current-name').textContent = updatedUser.name;
+            } else if (newPassword && !newName) {
+                const updatedUser = { ...JSON.parse(localStorage.getItem('user')), password: newPassword };
+                localStorage.setItem('user', JSON.stringify(updatedUser));
+                alert('Password updated successfully!');
+            } else {
+                alert('Please fill out only one field.');
+            }
+        });
+
+        function generateUID() {
+            return Math.floor(Math.random() * 1000000000);
+        }
+    </script>
+</body>
+</html>
